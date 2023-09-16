@@ -12,7 +12,7 @@ class Exit:
         self.__id = id
         self.__ticket = ticket
 
-    def validate_ticket(self, ticket):
+    def validate_ticket(self):
         # Perform validation logic for the parking ticket
         # Calculate parking charges
         # Handle the exit process.

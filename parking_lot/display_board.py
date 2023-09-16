@@ -1,5 +1,12 @@
 class DisplayBoard:
-    def __init__(self, id, handicapped_spot, compact_spot, large_spot, motorbike_spot):
+    def __init__(
+        self,
+        id,
+        handicapped_spot: list,
+        compact_spot: list,
+        large_spot: list,
+        motorbike_spot: list,
+    ):
         self.__id = id
         self.__handicapped_spot = handicapped_spot
         self.__compact_spot = compact_spot

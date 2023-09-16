@@ -1,6 +1,6 @@
 class ParkingLot:
     def __init__(self, id, name, address, parking_rate):
-        # Call the name, address, parking_rate elements of the customer
+        # Call the name, address, parking_rate elements from the database of the parking lot
         # in the parking lot from the database
         self.__id = id
         self.__name = name
