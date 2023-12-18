@@ -1,0 +1,15 @@
+1. First all the objects are created such as buttons, doors, elevator car, etc.
+2. Now we present an interactive terminal where the user can input the floor where it wants to be at.
+3. Next, the user will select the button to either go UP or DOWN.
+4. We assume the user has entered the elevator, and now the user selects the floor number button from the
+elevator panel.
+5. The elevator reaches the floor, and opens the door and exits.
+
+Behind the scenes:
+1. When the user selects the floor from where it wants to begin, we store that object in the dictionary.
+2. Then the user presses either the UP/DOWN button from the Hall panel, we store this data, and change the state
+of this button, and then call a callback function of the ElevatorSystem class called disptacher() to select the
+best elevator car for this request by providing the floor no, and direction of the button.
+3. The dispatcher gets the best Elevator car, and then it unpressed the hall button, and then the ElevatorSystem
+opens the door of the ElevatorCar, and move() the ElevatorCar until it floor no == the user selected floor.
+The ElevatorSystem now opens the door and then closes again through the ElevatorButton object.

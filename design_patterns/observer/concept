@@ -1,0 +1,20 @@
+There is a subject where is the Observable, and there is another subject which is the Observer.
+The Observable keeps track of all its Observers, and uses them to notify, or do some task.
+
+Ex: Notify button when an iPhone is out of stock in Amazon.
+The iPhone is the Observable, and the users are the Observers, meaning the users want to get notified when the
+iPhone is in-stock.
+We can have two types of concrete Observer class for this:
+1. EmailAlertObserver
+2. SMSAlertObserver
+
+Its upto the user to select the method of notification.
+
+The Observer should have these methods:
+1. add(): To add the observer
+2. remove(): To remove the observer
+3. notify(): To iterate over all the observers, and call their update() method
+4. set_data(): To set the new data of the Observable, and then notify the observers.
+
+The Observer should have these methods:
+1. update(): We use the business logic here to send the notification depending upon the notification type.
