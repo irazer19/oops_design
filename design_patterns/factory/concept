@@ -1,0 +1,16 @@
+Factory pattern:
+
+Lets say you have a class Vehicle from which there are MercedesVehicle and BMWVehicle concrete class.
+Now if there is a class called VehicleFactory which on the basis on some condition creates either MercedesVehicle or
+BMWVehicle, then thats a factory design pattern.
+
+Abstract Factory pattern
+
+This is same as Factory pattern except that we have Factory of Factory.
+Ex: Lets say we have a VehicleFactory class which on some condition creates either a LuxuryFactory or OrdinaryFactory,
+and then the LuxuryFactory on the basis on some condition creates either MercedesVehicle or BMWVehicle, then its
+called Abstract Factory pattern.
+
+
+
+

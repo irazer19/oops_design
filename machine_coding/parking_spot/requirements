@@ -1,0 +1,7 @@
+Classes:
+- Entrance: The user gets a ticket and a parking spot.
+- Ticket:
+- Exit
+- Vehicle
+- ParkingSpot
+- Payment
