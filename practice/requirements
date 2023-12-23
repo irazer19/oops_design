@@ -1,0 +1,11 @@
+car rental
+
+- car rental system
+- user
+- store
+- location
+- vehicle: Bike, Car
+- Reservation
+- Bill
+- Payment
+- VehicleInventory
