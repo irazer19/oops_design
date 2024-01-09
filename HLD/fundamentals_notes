@@ -1,0 +1,31 @@
+Network Protocols:
+
+Application layer:
+1. Client server protocol
+    1. http - 1 connection
+    2. ftp - 2 connections, data and control connections.
+    3. smtp - to send the email
+    4. web sockets
+2. Peer to peer protocol
+    1. webRTC: Uses UDP because its used in real time video conferencing.
+
+
+Client server:
+Client makes a request and the server responds back, its a one way communication.
+Web socket is slightly different because its bidirectional but its still not a peer to peer.
+In web socket, the client sends the data to server which sends to another client and vice-versa.
+
+SMTP: To send the email
+IMAP: To receive the email
+
+Peer to Peer:
+All the clients and servers can communicate with each other.
+
+Transport / Network layer:
+1. TCP/IP: We maintain a virtual connection through which data is sent, therefore ordering of the packets is
+            maintained. If there is no acknowledgement from the receiver then it again sends the same packet.
+2. UDP/IP: No connection is maintained here, the data is sent parallely without any order of the packets, the
+            advantage is that its faster than TCP because we dont maintain connection or do acknowledgements.
+
+
+
