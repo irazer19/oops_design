@@ -120,4 +120,33 @@ Advantages:
   Now whenever there is a create, update and delete operation, an event will be published which will save the data
   in the common database enabling access to all the latest data for read query.
 
+# How to scale a database?
+- By using more replicas and Master-Slave concept. If the master goes down then one of the slave is promoted as a master.
+- Vertical scaling: Increase the system resources and server capacity.
+- Horizontal scaling: Sharding of the data such that the data is stored in multiple distributed database.
+Types of Sharding:
+1. Horizontal sharding: Dividing the data by rows into mmultiple tables, Ex: Storing row-1 to row-100 in db1 and row-101
+                        to row-500 in db2.
+2. Vertical sharding: Diving the data by column wise and storing in different db.
 
+We can also do nested sharding if needed.
+
+# Consisten Hashing:
+- Hashing: Given a key it generates a fixed length character.
+- Mod hashing: Given a key, it generates a fixed length character and then mods(%) with the total number of available
+             hashes.
+- Need for Consisten hashing: Lets say we have 3 servers where for a given key we do f(key) % 3 and get the server 
+  which needs to store this data. Now if we add a new server then for the same key f(key) % 4 will return a different
+  server but our data will not be found here and we will have to rebalance all the previous data into the correct server
+  which is hard.
+- Consisten hashing solves this problem: It ensures that minimum number of rebalance happens when a server is added/removed.
+  We place the servers on a virtual ring, and then for a given key we find its hash on the ring and move in clockwise
+  direction, now the first server that we find will be serving this key request. To make the request distribution even
+  we use virtual server/nodes and place it on the ring such that all the keys are uniformaly handled by all the servers.
+  Virtual servers: Say we have a server A, now we use this same server and call it ServerA1, ServerA2, etc on the ring,
+  which ultimately points to the same Server A.
+
+
+
+              
+    
