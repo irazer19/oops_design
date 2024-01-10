@@ -55,7 +55,7 @@ P = Partition Tolerent: If any nodes loose connection with each other then the s
    migrate the whole monolith to a newer technology.
 
 # Micro service:
-Advantages:
+# Advantages:
 1. Easy to Scale
 2. Easy to bug fix due to loose coupling.
 3. Technology agnostic, any tech can be used in any microservice.
