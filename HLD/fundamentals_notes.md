@@ -249,3 +249,26 @@ Used to compare data for data corruption check.
 Lets say we have 4 chunks for a given data, now we will create a binary tree like structure where these 4 chunks are 
 the leaf nodes and compute the hash at every node until we reach the root node. 
 To compare whether data1 ==  data2, we only have to compare the root nodes of the these two data recursively.
+
+# NOSQL types:
+1. Key-value pair: Simplest nosql db where the value can be anything.
+2. Document db: It has key and the value is another document in json format on which we can run queries.
+3. Column wise db: Here for every key we store a value which is a {col1: val1, col2: val2, col3: val3, etc}
+4. Graph db: Data is stored in a node and its related to another node via an edge(relation).
+
+# ACID property:
+1. Atomicity: This property ensures that a transaction is treated as a single, indivisible unit of work. Either all the 
+   changes made in a transaction are committed to the database, or if the transaction fails at any point, all changes 
+   are rolled back. There is no scenario where a transaction is partially completed
+
+2. Consistency: Consistency ensures that a transaction brings the database from one valid state to another. The 
+   database should satisfy a set of predefined rules, known as integrity constraints. If a transaction would violate 
+   these constraints, it is rolled back and the database remains unchanged
+
+3. Isolation: This property ensures that concurrent execution of transactions leaves the database in the same state as 
+   if the transactions were executed sequentially. This means that the intermediate state of a transaction is invisible to other transactions
+
+4. Durability: Durability guarantees that once a transaction has been committed, it will remain committed even in the 
+   case of a system failure (such as a power outage or crash). This is typically achieved by storing transaction logs 
+   that can be used to recreate the system state right before the failure
+
