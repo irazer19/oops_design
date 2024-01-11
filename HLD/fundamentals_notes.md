@@ -135,16 +135,21 @@ We can also do nested sharding if needed.
 - Hashing: Given a key it generates a fixed length character.
 - Mod hashing: Given a key, it generates a fixed length character and then mods(%) with the total number of available
              hashes.
-- Need for Consisten hashing: Lets say we have 3 servers where for a given key we do f(key) % 3 and get the server 
-  which needs to store this data. Now if we add a new server then for the same key f(key) % 4 will return a different
-  server but our data will not be found here and we will have to rebalance all the previous data into the correct server
-  which is hard.
+- Need for Consisten hashing: [For equal distribution of load!] Lets say we have 3 servers where for a given key we do 
+  f(key) % 3 and get the server which needs to store this data. Now if we add a new server then for the same key 
+  f(key) % 4 will return a different server but our data will not be found here and we will have to rebalance all the 
+  previous data into the correct server which is hard.
 - Consisten hashing solves this problem: It ensures that minimum number of rebalance happens when a server is added/removed.
   We place the servers on a virtual ring, and then for a given key we find its hash on the ring and move in clockwise
   direction, now the first server that we find will be serving this key request. To make the request distribution even
   we use virtual server/nodes and place it on the ring such that all the keys are uniformaly handled by all the servers.
   Virtual servers: Say we have a server A, now we use this same server and call it ServerA1, ServerA2, etc on the ring,
   which ultimately points to the same Server A.
+- What about replication? If the replication factor n = 3, then we need to replicate the data in n-1 servers = 2 servers.
+  We move in the clockwise direction in the ring ignoring all the virtual nodes, and save the data in the node which are
+  in a differenet data-center.
+- Preference list: It is the list of all nodes where the replica data is stored. The first preference is given to the first
+  node where the data is stored. Every node has a preference list, and every other node is aware of every nodes preference list.
 
 # Twitter Snowflake:
 One popular example of a distributed unique ID generator is Twitter's Snowflake system. In Snowflake, a 64-bit ID is 
@@ -211,3 +216,36 @@ If one machine can hold 75Gb of data then we will need 750/75 = 10 machines will
 Latency: 95% of the time we will have 500ms of latency
 1 server has 50 threads
 Tradeoff: Also we would want Availability and Partition tolerance for facebook. Consistency is not so important here.
+
+
+# Data Versioning
+It uses Vector clock.
+In vector clock, lets say we have 3 servers s1, s2, s3. Every server will maintain a VALUE(server, counter), here
+the server=the server which handled the request and counter=the version of this data.
+Now if CAR is written in s1 then it will have CAR(s1, 1), and lets say it replicated the data to s2, s3.
+So s2 = Car(s1, 1) and s3 = Car(s1, 1).
+Now a request value CART came in but s1 is down, so from the preference list we select s2 to handle this request, so
+s2 = CAR(s1, 1), CART(s2, 1), and s2 was not able to replicate this data to s3.
+Now again lets say a request value CARM came in, and both s1 and s2 were down, so s3 handled it so:
+s3 = CAR(s1, 1), CARM(s3, 1)
+Next, all servers went healthy, and a GET request came in for it so s1 checks in:
+s1 = CAR(s1, 1)
+s2 = CAR(s1, 1), CART(s2, 1)
+s3 = CAR(s1, 1), CARM(s3, 1)
+
+s1 will know that CAR(s1, 1) cannot be the latest value because s2, s3 have new data version so it has to decide
+between CART(s2, 1) and CARM(s3, 1) but thats a conflict, and so it sends both the data to the client to resolve it.
+Client resolves the conflict and updates the nodes with the correct value.
+
+# Gossip protocol:
+Need? How will the servers know which of the servers are healthy and which ones are down?
+Each server maintains a list of all the servers health status, and sends the heartbeats periodically to let other 
+servers know that its alive.
+Lets say server2 stopped sending heartbeat, now if majority of the servers identify that server2's heartbeat was not
+received in last x seconds, then it server2 will be conculded as dead and will be replaced.
+
+# Merkel Tree
+Used to compare data for data corruption check.
+Lets say we have 4 chunks for a given data, now we will create a binary tree like structure where these 4 chunks are 
+the leaf nodes and compute the hash at every node until we reach the root node. 
+To compare whether data1 ==  data2, we only have to compare the root nodes of the these two data recursively.

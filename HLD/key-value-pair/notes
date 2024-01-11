@@ -1,0 +1,33 @@
+Goals:
+1. Scalability
+2. De-centralization
+3. Eventual consistency
+
+Steps:
+1. Partition
+2. Replication
+3. Get and Put operation
+4. Data Versioning
+5. Gossip protocol
+6. Merkel Tree
+
+
+# Partition: We will use consistent hashing to parition the data equally. This also solves the scalability problem.
+
+# Data replication: We move in the consisten hashing ring and replicate the data in the servers moving clockwise.
+Also the data will be replicated in asynchronously.
+
+# API:
+R + W > N, N = number of nodes
+1. Put(key, val): Write will be success if W nodes return True after writing.
+2. Get(key): Read will be success if R nodes agree on the same value of the data.
+
+# Data Versioning:
+It uses vector clock to resolve the conflicts and access the latest data.
+
+# We use gossip protocol to find which server is alive.
+# We use merkel tree to find whether the replicated node is in sync with the primary node's data.
+
+
+
+
