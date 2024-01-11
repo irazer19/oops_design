@@ -287,3 +287,36 @@ the item might be in the set, but it could be a false positive.
 A common use case is checking the availability of usernames. A Bloom filter can quickly check if a username is taken 
 without needing to store the actual username
 
+# Proxy Server:
+Its a server which sits between the client and the app server.
+There are two types:
+1. Forward proxy
+2. Reverse proxy
+
+## Forward proxy
+No server can talk to a client directly.
+It hides the client from the app servers. When a client sends a request, the proxy receives it and sends its own ip
+as the request maker to the app server, and the server thinks that the request is coming from the proxy.
+The server only talks to the proxy. 
+
+Advantages:
+1. This gives anonymity to the client.
+2. Group requests, ex: if two or more client asks for google.com, then it will just send a single request to the internet
+   and returns the result to both the clients.
+3. Access restricted data/content. If your country has blocked certain websites, then the proxy will block it if you try
+   to access it.
+4. Proxy servers can cache frequently accessed content
+
+## Reverse Proxy:
+No traffic coming from the internet can directly talk to the app servers.
+Advantages:
+1. Security: outside world is not aware of the internal server ip address but only of the reverse proxy. Attackers can
+   only attack reverse proxy server and not the internal servers. CDN is a kind-of a reverse proxy.
+2. Reverse Proxy can also act as a firewall.
+
+## Reverse Proxy vs Load balancer:
+1. Reverse proxy can act like a load balacner but load balancer cannot replace a proxy.
+2. For a single server we dont need a load balancer, but we need a reverse proxy.
+
+
+
