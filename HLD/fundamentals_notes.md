@@ -272,3 +272,18 @@ To compare whether data1 ==  data2, we only have to compare the root nodes of th
    case of a system failure (such as a power outage or crash). This is typically achieved by storing transaction logs 
    that can be used to recreate the system state right before the failure
 
+# Bloom Filter:
+Bloom Filter: A Bloom filter is a probabilistic data structure that is used to test whether an element is a member of a 
+set. It's space-efficient and can quickly check if an item is in a set
+
+False Positives: The price we pay for efficiency is that Bloom filters are probabilistic in nature, meaning there might
+be some false positive results. A false positive means the filter might indicate that a given item is in the set when 
+it is not. However, Bloom filters never generate false negative results
+
+Bitmap: Under the hood, a Bloom filter is just a bitmap. Initially, all the bits are set to 0. To add an item, the item
+is hashed, the result is modded by the length of the bitmap, and that bit is set to 1. To check if an item is in the 
+set, the same process is followed. If the bit is 0, then the item is definitely not in the set. If the bit is 1, then 
+the item might be in the set, but it could be a false positive.
+A common use case is checking the availability of usernames. A Bloom filter can quickly check if a username is taken 
+without needing to store the actual username
+
