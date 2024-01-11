@@ -1,0 +1,38 @@
+Types:
+1. Point to point: The message will be broadcasted and consumed by only a single consumer.
+2. Pub-sub: The message will be broadcasted to multiple consumer groups and can be consumed by them. Ex: Kafka
+
+# KafKa:
+1. Producer
+2. Consumer
+3, Consumer Group
+4. Topic
+5. Partition
+6. Offset
+7. Broker
+8. Cluster
+9. Zookeeper
+
+Kafka is pull-based approach: It means that the consumer is polling for messages from the broker.
+
+- Producer talks to the broker (Kafka server).
+- Broker has many topics.
+- A Topic will have partitions(p0, p1, p2...etc).
+- Each Partiton has offsets (total count of the offset = size of the queue).
+- A single consumer reads from a partiton alone.
+- Two consumers of the same group cannot read from the same partition.
+- Two consumers from different group can read from the same partition.
+- Each consumer is a part of a consumer group.
+- Consumer group can have many consumers.
+- Group of brokers is called cluster
+- Zookeeper helps the brokers to interact with each other providing distributed synchronization.
+- Consumer offsets are stored in topics and broker maintains the offset of every consumer.
+- If a consumer fails inside a consumer group, then its partition is assigned to another consumer from the latest offset
+  which was consumed by the broker and this is called rebalance.
+- Every partition can have replica, the primary partition is called the Leader, and its replica on different broker is called
+  the follower.
+- If a queue size limit is reached in a single broker for a partition, the solution is to scale it using distributed brokers.
+- If a message fails to get processed then it put in a dead-letter queue for retry.
+
+
+
