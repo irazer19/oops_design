@@ -319,4 +319,85 @@ Advantages:
 2. For a single server we dont need a load balancer, but we need a reverse proxy.
 
 
+# Load balancer:
+Two types:
+1. Application LB: Can read headers, session, etc. It is much more advanced.
+2. Network LB: This is much faster than the App LB.
+
+Round Robin:
+The load is distributed in sequence and in fixed order. It is easy to implement and load is equally distributed.
+Disadvantage: If a server is 10x faster than other servers, its capacity will never be fully utilized.
+
+Weight Round robin:
+We can give higher weight to a server and weight represents the capacity of the server. If a server has a weight of 3,
+then first 3 requests will go that server and so on.
+Disadvantage: If a low capacity server receives a long processing request and high capacity server gets fast requests,
+then the low capacity server will be over-burdened because it will get a request before it has finished previous request.
+
+IP Hash algorithm: Every client ip will be hashed and assigned a server, this will ensure that the same server processess
+the same client everytime (Sticky).
+Disadvantage: If lots of client are going through a forward proxy, then the LB will hash the proxy's IP address which
+will over burnden a single server with all of those requests.
+
+Least connections:
+The LB will forward the request to server having the least number of active connections.
+Disadvantage: Sometimes tcp connections are active without any data transfer, this will make the LB take wrong decisions.
+
+Weighted Least Connection:
+Same as Least connection except that we assign weight to every server based on its capcity. LB will compute the
+ratio of (number of active connection) / weight for every request.
+
+
+# Caching
+Caching is the mechanism of storing data in a temporary storage location, either in memory or on disk, to serve data 
+requests faster. It improves performance by decreasing page load times and reduces the load on servers and databases
+
+Layers of caching:
+1. Client side caching(Browser)
+2. CDN(Used to store static data)
+3. Load balancer
+4. Server side caching (Redis)**
+
+Ususally the server side cache such as redis sits between the app server and the database.
+
+## Distributed Caching
+This is a cache that spans multiple servers so that it can grow and shrink in size and throughput as needed.
+Each client has a "cache client" which help it connect to one of the cache servers. It uses consistent hashing
+to select one of the servers from the cluster.
+
+## Caching Strategies:
+Cache-Aside: This is the most commonly used caching approach. When an application needs data, it first checks the cache.
+If the data is in the cache (a cache hit), it is returned immediately. If the data is not in the cache (a cache miss), 
+the application retrieves the data from the main storage, stores it in the cache for future use, and then returns it. 
+This strategy is particularly useful for applications with read-heavy workloads.
+
+Read-Through: In this strategy, the cache sits between the application and the main storage. When a read request comes 
+in, the cache checks if it has the data. If it does, it returns it (cache hit). If it doesn't, it retrieves the data 
+from the main storage, stores it, and then returns it. This strategy ensures that the cache always has the most recent 
+copy of the data.
+
+Write-Through: This strategy is similar to read-through, but it applies to write operations. When a write request comes
+in, the cache updates itself and also forwards the write to the main storage. This ensures that the cache and the main 
+storage are always in sync.
+
+Write-Back (or Write-Behind): In this strategy, when a write request comes in, the cache immediately updates itself and 
+acknowledges the write to the application, but it delays updating the main storage. This can improve performance by 
+reducing the number of write operations to the main storage, but there's a risk of data loss if the cache fails before
+it has a chance to update the main storage.
+
+Write-Around: In this strategy, write requests are sent directly to the main storage, bypassing the cache. This prevents
+the cache from being filled up with write-intensive data that may not be read again soon. However, if the data is read 
+soon after being written, this strategy could result in more cache misses.
+
+Refresh-Ahead: This strategy predicts which data items are likely to be requested in the near future and preloads them 
+into the cache. This can reduce cache misses, but it requires a good prediction algorithm to be effective.
+
+## Cache Replacement Policies: 
+These are strategies that determine which item to discard when the cache is full. 
+Common policies include Least Recently Used (LRU), First In First Out (FIFO), and Least Frequently Used (LFU)
+
+
+
+
+
 
