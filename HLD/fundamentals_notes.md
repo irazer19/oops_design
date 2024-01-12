@@ -397,7 +397,47 @@ These are strategies that determine which item to discard when the cache is full
 Common policies include Least Recently Used (LRU), First In First Out (FIFO), and Least Frequently Used (LFU)
 
 
+# How to handle distributed transaction?
+A distributed transaction is a set of operations on data that is performed across two or more databases. 
+These operations are coordinated across separate nodes connected by a network, and they ensure ACID properties and data integrity
 
+Three ways to handle it:
+1. 2-Phase commit
+2. 3-Phase commit
+3. SAGA pattern (already discussed above)
 
+## 2-Phase commit:
+There is a transaction coordinator which does the following:
+1. Sends the query to the two databases d1, d2.
+2. PHASE 1: Then asks d1 and d2 "Are you prepared for commit?".
+3. PHASE 2: If both reply "OK", then it sends a commit request to both of them.
+4. If any one of them reply "NO" then it aborts all the requests.
+
+Problems that can arise:
+1. Transcation coordinator failure:
+   - Prepare message can be lost
+   - Commit message is lost
+2. Database failure during response.
+   - Database response message is lost
+
+Solution:
+- Transaction coordinator will maintain a lock file and writes all the actions.
+- If the prepare message is lost, and db has applied the lock, then the db will wait for sometime and then abort.
+- If OK message is lost, then the transaction coordinator will wait for sometime and then abort.
+- If the commit message is lost then the db will contact the transaction coordinator and ask for either commit or abort.
+  The transcation coordinator will look into its lock file and reply to the db. Here the db is not able to take its
+  own decision.
+
+## 3-Phase commit:
+The only difference is that it has an intermediate phase which sends the decision of the transcation coordinator:
+1. Sends the query to the two databases d1, d2.
+2. PHASE 1: Then asks d1 and d2 "Are you prepared for commit?".
+3. PHASE 2: If both reply "OK", then it sends a precommit message telling its final decision "Commit/abort"
+4. PHASE 3: If both reply "ACK", then it sends a commit request to both of them.
+5. If any one of them reply "NO" then it aborts all the requests.
+
+Now if the pre-commit message fails, then the databases will coordinate with each other and check about the latest
+decision of the transcation coordinator from their lock file, and if any database has recevied "commit" or "abort", 
+then all other databases will follow it.
 
 
