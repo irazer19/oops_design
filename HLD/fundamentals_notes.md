@@ -584,4 +584,82 @@ conflicts:
 3. Distributed two-phase locking: There are a number of lock managers, where each lock manager controls locks of data 
    items stored at its local site. The location of the lock manager is based upon data distribution and replication
 
+## CDC
+Change Data Capture (CDC) is a technique used in databases to identify and track changes to data—often referred to as 
+the "deltas." This process allows for the capture of changes made to the data in a database, and these changes can then
+be used for various purposes such as updating data warehouses, data replication, and providing real-time analytics
+
+Transaction Log Reading: Modern databases maintain a transaction log that records all changes made to the database. By 
+reading this log, it is possible to capture all the changes without modifying the database schema or affecting its performance
+
+An SQL trigger is a specialized type of stored procedure that automatically executes or "fires" when a specific event 
+occurs in the database. We use SQL triggers to send an update to another database for data consistency.
+
+## Database Migration:
+This is going to be more complex engineering, but worth it the savings in downtime.
+1. Set up a change data capture solution (Similar to a SQL trigger).
+2. Take a database copy of all older records.
+3. Setup a view or proxy to serve existing clients through the old database.
+4. Set the clients to point to the proxy.
+5. Now point the proxy to the new database.
+6. Point clients to the new database directly (this requires a deployment or server restart).
+7. Delete the proxy.
+
+## Token based auth:
+Token-based authentication is a security protocol that uses an access token to verify an authorized website, application,
+or API connection. It is an alternative and a supplement to traditional authentication methods such as username and 
+password. The token is a temporary key that verifies identity and authorizes resource access
+
+Here's how token-based authentication works:
+Request: The user logs in to a service using their login credentials, which issues an access request to a server or 
+protected resource. The credentials can involve a username, password, smartcard, or biometrics
+
+Verification: The server verifies the login information to determine that the user should have access. 
+This involves checking the password entered against the username provided
+
+Token Submission: The server generates a secure, signed authentication token for the user for a specific period of time.
+Tokens are encrypted and machine-generated, making each token unique
+
+Storage: The token is transmitted back to the user’s browser, where it is stored for future requests. The token is then 
+included in the header of subsequent requests to authenticate the user
+
+Token Verification: For each subsequent request, the server verifies the token. If the token is valid, the server 
+processes the request. If the token is invalid or expired, the server denies the request and the user must re-authenticate
+
+## SSO: (Single sign on)
+Single Sign-On (SSO) is a user authentication service that permits a user to use one set of login credentials 
+(e.g., name and password) to access multiple applications. The service authenticates the end user for all the 
+applications they have been given rights to and eliminates further prompts when the user switches applications during 
+the same session.
+
+## OAuth:
+OAuth (Open Authorization) is an open standard for token-based authorization that allows third-party services to access 
+user data without exposing user account credentials. It's commonly used to enable users to log in to various web 
+services using another service's login credentials, like using Google or Facebook to sign in to other websites or apps.
+
+Here's a simplified explanation of how OAuth works:
+
+1. User Authorization Request**: A user attempts to access a resource or service that requires OAuth (the Consumer), 
+   such as a third-party application. The service requests authorization from the user to access their data from another
+   service (the Service Provider), like Google or Facebook.
+2. User Grants Permission**: The user grants permission to the Consumer to access their data on the Service Provider. 
+   This is typically done through a consent screen that outlines the data the Consumer is requesting access to.
+3. Consumer Obtains Authorization Grant**: The Service Provider issues an authorization grant to the Consumer, which is
+   a credential representing the user's authorization.
+4. Consumer Requests Access Token**: The Consumer exchanges the authorization grant for an access token by 
+   authenticating with the Service Provider and demonstrating possession of the authorization grant.
+5. Service Provider Issues Access Token**: The Service Provider validates the authorization grant and Consumer 
+   authentication, then issues an access token (and possibly a refresh token) to the Consumer.
+6. Consumer Accesses User Data**: The Consumer uses the access token to access the user's protected resources hosted by 
+   the Service Provider. The access token acts as a valet key, granting specific permissions without exposing the user's full credentials.
+7. Token Validation**: The Service Provider validates the access token and, if it's valid, serves the requested data 
+   to the Consumer.
+
+## Access control list:
+An Access Control List (ACL) is a list of rules that specifies which users or systems are granted or denied access to a 
+particular object or system resource. Each system resource has a security attribute that identifies its access control 
+list. The list includes an entry for every user who can access the system.
+
+
+
 
