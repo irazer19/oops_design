@@ -661,5 +661,23 @@ particular object or system resource. Each system resource has a security attrib
 list. The list includes an entry for every user who can access the system.
 
 
+## Zookeeper:
+Apache ZooKeeper is an open-source coordination service for distributed applications. It provides a centralized 
+infrastructure and services that enable synchronization across a cluster. ZooKeeper maintains configuration information,
+naming, distributed synchronization, and group services.
+
+Apache Kafka, a distributed streaming platform, uses Apache ZooKeeper for several important functions
+Cluster Membership: ZooKeeper tracks the status of Kafka brokers that are part of the Kafka cluster. It maintains a 
+list of active and failed nodes in the cluster.
+
+Leader Election: Kafka topics are split into partitions and each partition has one leader and multiple followers. 
+The leader handles all read and write requests for the partition while the followers passively replicate the leader. 
+If the leader fails, one of the followers will automatically become the new leader. ZooKeeper is used to elect the 
+leader and track the status of the leader.
+
+Metadata Storage: ZooKeeper stores metadata about Kafka topics, partitions, and replicas. This includes information 
+like which topics exist, how many partitions each topic has, where the replicas are, who the leader is, and the current 
+state of each partition
+
 
 
