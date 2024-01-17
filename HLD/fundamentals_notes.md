@@ -440,4 +440,148 @@ Now if the pre-commit message fails, then the databases will coordinate with eac
 decision of the transcation coordinator from their lock file, and if any database has recevied "commit" or "abort", 
 then all other databases will follow it.
 
+# Database Indexing
+Indexing is used to increase the performance of the database query such that data fetch can be faster.
+The table view of the database is just a logical view, the actual data is just in a data-page.
+Data-page is created by DBMS and is typically 8KB.
+Each data-page has three parts:
+1. Header: Page number, free space, etc
+2. Data Records: Actual data is stored here.
+3. Offset: Contains an array, and each index of the array holds a pointer to the corresponding data in Data Records.
+
+To store a large table rows, dbms can create multiple data-pages.
+These data-pages get ultimately stored in a data-block which is a physical memory inside a disk.
+A Data-block is the minimum amount of data which can be read/write by a single I/O operation.
+Based on the data-block size, it can store 1 or more data-pages.
+DMBS maintains a mapping of data-block to data-page.
+
+Whenever a particular column of a table is indexed, DBMS maintains a B+ tree to store the column data in a sorted order.
+In a B+ tree, data is stored only at the leaf nodes, and all leaf nodes are at the same level, which ensures balanced 
+access times for all records.
+
+The DBMS knows the pointer of a leaf node in a B+ tree to a row because each key in the leaf node is associated with a 
+specific pointer that references the location of the actual data record in the data-page where the records are stored.
+
+# Concurrency control in distributed system:
+What is DB locking?
+Applies a lock to a row in the table such that no other request can update that row.
+Two types:
+1. Shared Lock
+2. Exclusive Lock
+
+Shared Locks: A shared lock, also known as a read lock, allows multiple transactions to read (but not modify) the same 
+data simultaneously. This type of lock is used when a transaction wants to read an item that doesn't have an exclusive 
+lock. Any number of resources can fetch the data to read when the shared lock is present on the resource. However, a 
+shared lock prevents any transaction from updating the data until all shared locks have been released.
+
+Exclusive Locks: An exclusive lock, also known as a write lock, allows only one transaction to access (read or modify) 
+data at a given time. This type of lock is used when a transaction wants to update unlocked items. When a data item is 
+under an exclusive lock, no other transactions can read or modify the data until the current transaction releases its 
+lock. There cannot be more than one exclusive lock on the same resource.
+
+## Transaction Isolation Levels:
+Transaction isolation levels in a database management system (DBMS) control the degree of interaction between concurrent
+transactions. They are used to balance the trade-off between data consistency and performance.Transaction isolation 
+levels in a database management system (DBMS) control the degree of interaction between concurrent transactions. 
+They are used to balance the trade-off between data consistency and performance.
+
+Read Uncommitted: This is the lowest level of isolation. In this level, a transaction may read data that is being 
+modified by another transaction but not yet committed, leading to a phenomenon known as "dirty reads". This level 
+provides the highest concurrency but the least consistency. No Lock is aquired!
+
+Read Committed: In this level, a transaction can only read data that has been committed by other transactions. 
+This prevents dirty reads but can still lead to non-repeatable reads, where a transaction reads the same row multiple 
+times and gets different results if another transaction modifies the data in between the reads.
+Lock is aquired and then released after reading.
+
+Repeatable Read: This level prevents both dirty reads and non-repeatable reads by ensuring that a transaction sees a 
+consistent snapshot of the data for the duration of the transaction. However, it can still lead to phantom reads, where 
+a transaction executes a query twice and gets a different set of rows each time because another transaction has inserted
+or deleted rows in between the queries. Lock is aquired and released at the end of the trasaction.
+
+Serializable: This is the highest level of isolation. It prevents dirty reads, non-repeatable reads, and phantom reads 
+by requiring transactions to acquire more locks and effectively serializing access to the data. This level provides the 
+highest consistency but the least concurrency. Lock is aquired and released at the end of the trasaction.
+
+Concurrency control is a critical aspect of database management systems (DBMS) that ensures the integrity of data when
+multiple transactions are executed simultaneously. There are two primary strategies for managing concurrency: optimistic 
+and pessimistic concurrency control.
+
+## Optimistic Concurrency Control
+Optimistic concurrency control (OCC) operates under the assumption that conflicts between transactions will occur 
+infrequently. It allows multiple transactions to proceed without blocking each other, assuming that conflicts are rare. 
+The OCC mechanism does not lock data when a transaction starts. Instead, it validates the data right before the changes 
+are committed. If a conflict is detected at this stage, the transaction is rolled back, and the user may need to 
+intervene to complete the transaction manually.
+
+The flow of transaction phases in OCC is typically: Read -> Compute -> Validate -> Write. 
+
+The advantages of OCC include the ability to serve multiple users at once, no deadlock situations, and it does not
+affect performance significantly. However, it requires maintenance of versions or timestamps and manual implementation 
+of concurrency handling logic. OCC is usually suitable for applications with fewer conflicts, as it reduces the number 
+of rollbacks required and the total cost of rollbacks.
+
+## Pessimistic Concurrency Control
+Pessimistic concurrency control (PCC) operates under the assumption that conflicts between transactions will occur 
+frequently. To prevent these conflicts, PCC locks the data as soon as a transaction begins, preventing other 
+transactions from modifying the same data until the initial transaction is completed. This approach can prevent data 
+inconsistency but can lead to reduced concurrency and potential deadlocks.
+
+The flow of transaction phases in PCC is typically: Validate -> Read -> Compute -> Write.
+
+PCC is more complex in designing and managing due to the risk of deadlocks. It also has a higher storage cost due to 
+the need for maintaining locks. However, it helps in protecting the system from concurrency conflicts.
+
+## Choosing Between Optimistic and Pessimistic Concurrency Control
+The choice between OCC and PCC depends on the specific requirements of your application. If conflicts are rare and
+performance is a priority, OCC may be the better choice. On the other hand, if data integrity is paramount and conflicts
+are expected to be frequent, PCC may be more suitable.
+
+- Sites: Nodes where database is hosted.
+- Lock managers: A "lock manager" is a component or process within each site that is responsible for managing the locks 
+  on the data items stored at its local site. 
+
+# Two Phase Locking:
+
+Two-phase locking (2PL) is a concurrency control method used in databases to ensure that transactions are executed in a 
+serializable manner, which means that the results of the transactions are consistent with some order of serial execution.
+The two-phase locking protocol divides the execution of a transaction into two distinct phases: the expanding (or growing)
+phase and the shrinking (or contracting) phase.
+
+### Expanding Phase (Growing Phase)
+During the expanding phase, a transaction can acquire locks but cannot release any locks. This phase continues until the
+transaction acquires all the locks that it needs. The point at which a transaction has obtained all the locks it requires
+is known as the lock point.
+
+### Shrinking Phase (Contracting Phase)
+Once the transaction reaches its lock point, it enters the shrinking phase. In this phase, the transaction can release 
+locks but cannot acquire any new ones. The transaction releases all the locks only after all its operations that require
+locking are complete, typically after all updates are written to the database.
+
+The two-phase locking protocol can be further classified into different types, such as strict two-phase locking, where a
+transaction holds all its exclusive locks until it commits or aborts, ensuring that no other transaction can read or write 
+the locked data until it is fully committed.
+
+### Deadlocks and Livelocks
+While two-phase locking guarantees serializability, it does not prevent deadlocks, where two or more transactions are 
+waiting for each other to release locks. Livelocks, a similar condition where transactions continuously acquire and 
+release locks without making progress, can also occur. To prevent these issues, lock ordering or timeout mechanisms can 
+be used.
+
+### Distributed Two-Phase Locking
+Distributed Two-Phase Locking is a method used in distributed database systems to control concurrency and ensure the 
+ACID properties of transactions. It is an extension of the basic two-phase locking protocol, which is a pessimistic 
+concurrency control method that guarantees serializability
+In a distributed system, there are sites designated as lock managers. A lock manager controls lock acquisition requests 
+from transaction monitors. Coordination between the lock managers in various sites is enforced to maintain consistency.
+The distributed two-phase locking protocol can be of three types, depending on the number of sites that can detect lock 
+conflicts:
+1. Centralized two-phase locking: One site is designated as the central lock manager. All the sites in the environment 
+   know the location of the central lock manager and obtain locks from it
+2. Primary copy two-phase locking: A number of sites are designated as lock control centers. Each of these sites has the
+   responsibility of managing a defined set of locks. All the sites know which lock control center is responsible for managing
+   the lock of which data table
+3. Distributed two-phase locking: There are a number of lock managers, where each lock manager controls locks of data 
+   items stored at its local site. The location of the lock manager is based upon data distribution and replication
+
 
