@@ -678,3 +678,7 @@ leader and track the status of the leader.
 Metadata Storage: ZooKeeper stores metadata about Kafka topics, partitions, and replicas. This includes information 
 like which topics exist, how many partitions each topic has, where the replicas are, who the leader is, and the current 
 state of each partition
+
+# System design requirements:
+The functional requirements are the features and functionalities that the user will get, whereas the non-functional 
+requirements are the expectations in terms of performance from the system.
