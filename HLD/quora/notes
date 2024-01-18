@@ -1,0 +1,45 @@
+Requirements:
+Functional requirements:
+- Questions and answers: Users can ask questions and give answers. Questions and answers can include images and videos.
+- Upvote/downvote and comment: It is possible for users to upvote, downvote, and comment on answers.
+- Search: Users should have a search feature to find questions already asked on the platform by other users.
+- Recommendation system: A user can view their feed, which includes topics they’re interested in. The feed can also include
+questions that need answers or answers that interest the reader. The system should facilitate user discovery with a
+recommender system.
+- Ranking answers: We enhance user experience by ranking answers according to their usefulness. The most helpful answer
+will be ranked highest and listed at the top.
+
+Non-functional requirements:
+- Scalability: The system should scale well as the number of features and users grow with time. It means that the
+performance and usability should not be impacted by an increasing number of users.
+- Consistency: The design should ensure that different users’ views of the same content should be consistent.
+In particular, critical content like questions and answers should be the same for any collection of viewers. However,
+it is not necessary that all users of Quora see a newly posted question, answer, or comment right away.
+- Availability: The system should have high availability. This applies to cases where servers receive a large number of
+concurrent requests.
+- Performance: The system should provide a smooth experience to the user without a noticeable delay.
+
+# API
+- POST: postQuestion(user_id, question, description, topic_label, video, image)
+- POST: postAnswer(user_id, question_id, answer_text, video, image)
+- POST: upvote(user_id, question_id, answer_id)
+- POST: comment(user_id, answer_id, comment_text)
+- GET: search(user_id, search_text)
+
+# Flow:
+We combine the web and application servers within a single powerful machine that can handle all the processes at once.
+This technique eliminates the network I/O and the latency introduced due to the network hops
+
+Memcached is primarily used to store frequently accessed critical data that is otherwise stored in MySQL
+Redis is mainly used to store an online view counter of answers because it allows in-store increments
+
+Tables in the MySQL server are converted to separate shards that we refer to as partitions. A partition has a single
+primary server and multiple replica servers.
+After we complete the partitioning, we require two types of mappings or metadata to complete our scaling process:
+Which partitions contain which tables and columns?
+Which hosts are primary and replicas of a particular partition?
+**Both of these mappings are maintained by a service like ZooKeeper.**
+
+Quora uses a technique called long polling, where if a client requests for an update, the server may not respond for as
+long as 60 seconds if there are no updates. However, if there is an update, the server will reply immediately and allow
+the client to make new requests.
