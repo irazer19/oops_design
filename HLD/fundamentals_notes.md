@@ -678,6 +678,3 @@ leader and track the status of the leader.
 Metadata Storage: ZooKeeper stores metadata about Kafka topics, partitions, and replicas. This includes information 
 like which topics exist, how many partitions each topic has, where the replicas are, who the leader is, and the current 
 state of each partition
-
-
-
