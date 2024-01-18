@@ -658,7 +658,7 @@ Here's a simplified explanation of how OAuth works:
 ## Access control list:
 An Access Control List (ACL) is a list of rules that specifies which users or systems are granted or denied access to a 
 particular object or system resource. Each system resource has a security attribute that identifies its access control 
-list. The list includes an entry for every user who can access the system.
+list. The list includes an entry for every user who can access the system. Is this visible?
 
 
 ## Zookeeper:
