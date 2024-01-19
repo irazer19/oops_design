@@ -22,7 +22,7 @@ Peer to Peer:
 All the clients and servers can communicate with each other.
 
 Transport / Network layer:
-1. TCP/IP: We maintain a virtual connection through which data is sent, therefore ordering of the packets is
+1. TCP/IP: We maintain a virtual connection through which data is sent, therefore ordering of the packets is \
             maintained. If there is no acknowledgement from the receiver then it again sends the same packet.
 2. UDP/IP: No connection is maintained here, the data is sent parallely without any order of the packets, the
             advantage is that its faster than TCP because we dont maintain connection or do acknowledgements.
@@ -34,10 +34,10 @@ C = Consistency: All nodes should have the same value when requested.
 A = Availability: The request should always be processed irrespective of the response code (HTTP 200/500, etc)
 P = Partition Tolerent: If any nodes loose connection with each other then the system should not go down.
 
-1. CA: We can achieve CA at the cost of P, meaning that if there is a connection loss between some node, then we
+1. CA: We can achieve CA at the cost of P, meaning that if there is a connection loss between some node, then we \
        will have to down the entire system until the connection is re-established.
-2. CP: If there is a partition between nodes, then all the nodes cannot be available.
-3. AP: If there is a partition between nodes, then even if all the nodes are available, the consistency between them
+2. CP: If there is a partition between nodes, then all the nodes cannot be available. \
+3. AP: If there is a partition between nodes, then even if all the nodes are available, the consistency between them \
        will be lost until the connection is re-established.
 
 ##########################################################################
@@ -62,11 +62,11 @@ P = Partition Tolerent: If any nodes loose connection with each other then the s
 4. Quicker deployment since microservices can be deployed independently,
 
 # Disadvantage:
-1. Increased Complexity: Microservices introduce complexity as they transform applications into distributed systems.
+1. Increased Complexity: Microservices introduce complexity as they transform applications into distributed systems. \
    Communication between services, data consistency, and managing different services can be complex.
-2. Data Management: Each microservice can have its own database, which can lead to challenges in data consistency and
+2. Data Management: Each microservice can have its own database, which can lead to challenges in data consistency and \
    management across services
-3. Network Congestion and Latency: Microservices communicate over the network, which can lead to network congestion
+3. Network Congestion and Latency: Microservices communicate over the network, which can lead to network congestion \
    and increased latency
 4. Testing and debugging a microservices-based application can be more complex due to the distributed nature of the app.
 
@@ -83,8 +83,8 @@ P = Partition Tolerent: If any nodes loose connection with each other then the s
 2. By subdomain.
 
 # Strangler design pattern:
-- Whenever we want to migrate a monolithic to microservices, we can first deploy the microservice and start sending only
-  10% of the traffic to it and 90% to the monolithic. Now slowly if the errors/bugs get fixed then we can increase the
+- Whenever we want to migrate a monolithic to microservices, we can first deploy the microservice and start sending only \
+  10% of the traffic to it and 90% to the monolithic. Now slowly if the errors/bugs get fixed then we can increase the \
   traffic to the microservice untill all 100% of the traffic moves to it and 0% traffic to the monolithic.
 
 # Database Management in microservice:
@@ -656,29 +656,29 @@ Here's a simplified explanation of how OAuth works:
    to the Consumer.
 
 ## Access control list:
-An Access Control List (ACL) is a list of rules that specifies which users or systems are granted or denied access to a 
-particular object or system resource. Each system resource has a security attribute that identifies its access control 
+An Access Control List (ACL) is a list of rules that specifies which users or systems are granted or denied access to a \
+particular object or system resource. Each system resource has a security attribute that identifies its access control \
 list. The list includes an entry for every user who can access the system.
 
 
 ## Zookeeper:
-Apache ZooKeeper is an open-source coordination service for distributed applications. It provides a centralized 
-infrastructure and services that enable synchronization across a cluster. ZooKeeper maintains configuration information,
+Apache ZooKeeper is an open-source coordination service for distributed applications. It provides a centralized \
+infrastructure and services that enable synchronization across a cluster. ZooKeeper maintains configuration information, \
 naming, distributed synchronization, and group services.
 
-Apache Kafka, a distributed streaming platform, uses Apache ZooKeeper for several important functions
-Cluster Membership: ZooKeeper tracks the status of Kafka brokers that are part of the Kafka cluster. It maintains a 
+Apache Kafka, a distributed streaming platform, uses Apache ZooKeeper for several important functions \
+Cluster Membership: ZooKeeper tracks the status of Kafka brokers that are part of the Kafka cluster. It maintains a \
 list of active and failed nodes in the cluster.
 
-Leader Election: Kafka topics are split into partitions and each partition has one leader and multiple followers. 
-The leader handles all read and write requests for the partition while the followers passively replicate the leader. 
-If the leader fails, one of the followers will automatically become the new leader. ZooKeeper is used to elect the 
+Leader Election: Kafka topics are split into partitions and each partition has one leader and multiple followers. \
+The leader handles all read and write requests for the partition while the followers passively replicate the leader. \ 
+If the leader fails, one of the followers will automatically become the new leader. ZooKeeper is used to elect the \
 leader and track the status of the leader.
 
-Metadata Storage: ZooKeeper stores metadata about Kafka topics, partitions, and replicas. This includes information 
-like which topics exist, how many partitions each topic has, where the replicas are, who the leader is, and the current 
+Metadata Storage: ZooKeeper stores metadata about Kafka topics, partitions, and replicas. This includes information \
+like which topics exist, how many partitions each topic has, where the replicas are, who the leader is, and the current \
 state of each partition
 
 # System design requirements:
-The functional requirements are the features and functionalities that the user will get, whereas the non-functional 
+The functional requirements are the features and functionalities that the user will get, whereas the non-functional \
 requirements are the expectations in terms of performance from the system.
