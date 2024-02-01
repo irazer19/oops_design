@@ -1,4 +1,4 @@
-There is a subject where is the Observable, and there is another subject which is the Observer.
+There is a subject which is the Observable, and there is another subject which is the Observer.
 The Observable keeps track of all its Observers, and uses them to notify, or do some task.
 
 Ex: Notify button when an iPhone is out of stock in Amazon.
@@ -10,7 +10,7 @@ We can have two types of concrete Observer class for this:
 
 Its upto the user to select the method of notification.
 
-The Observer should have these methods:
+The Observable should have these methods:
 1. add(): To add the observer
 2. remove(): To remove the observer
 3. notify(): To iterate over all the observers, and call their update() method
