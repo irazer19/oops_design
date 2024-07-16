@@ -1,30 +1,23 @@
-from product import Product
 from abc import ABC, abstractmethod
 
 
-class Coupon(Product):
-    pass
+class Coupon(ABC):
+    @abstractmethod
+    def apply(self, product):
+        pass
 
 
-class PercentageCoupon(Coupon):
-    def __init__(self, percentage, product):
+class PercentageOffCoupon(Coupon):
+    def __init__(self, percentage):
         self.percentage = percentage
-        self.product = product
-        super().__init__(product.product_name, product.price)
 
-    def get_price(self):
-        return (self.product.get_price() * (100 - self.percentage)) / 100
+    def apply(self, product):
+        return product.get_price() * (1 - self.percentage / 100)
 
 
-class TypeCoupon(Coupon):
-    alllowed_types = ["PHONE", "FURNITURE"]
+class FixedAmountOffCoupon(Coupon):
+    def __init__(self, amount):
+        self.amount = amount
 
-    def __init__(self, prod_type, product):
-        self.prod_type = prod_type
-        self.product = product
-        super().__init__(product.product_name, product.price)
-
-    def get_price(self):
-        if self.prod_type == "FURNITURE":
-            return (self.product.get_price() * 20) / 100
-        return self.product.get_price()
+    def apply(self, product):
+        return max(0, product.get_price() - self.amount)

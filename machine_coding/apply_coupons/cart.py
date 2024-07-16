@@ -1,21 +1,19 @@
-from coupon import PercentageCoupon, TypeCoupon
+class ShoppingCart:
+    def __init__(self):
+        self.products = []
+        self.coupons = []
 
+    def add_product(self, product):
+        self.products.append(product)
 
-class Cart:
-    def __init__(self, products):
-        self.products = products
+    def add_coupon(self, coupon):
+        self.coupons.append(coupon)
 
-    def add_product(self, product, prod_type):
-        prod = TypeCoupon(
-            prod_type=prod_type,
-            product=PercentageCoupon(percentage=10, product=product),
-        )
-
-        self.products.append(prod)
-
-    def get_total_price(self):
-        total_price = 0
-
+    def calculate_total(self):
+        total = 0
         for product in self.products:
-            total_price += product.get_price()
-        return total_price
+            price = product.get_price()
+            for coupon in self.coupons:
+                price = coupon.apply(product)
+            total += price
+        return total

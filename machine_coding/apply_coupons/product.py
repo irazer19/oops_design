@@ -1,10 +1,8 @@
-from abc import ABC, abstractmethod
-
-
-class Product(ABC):
-    def __init__(self, product_name, price):
-        self.product_name = product_name
+class Product:
+    def __init__(self, name, price, category):
+        self.name = name
         self.price = price
+        self.category = category
 
     def get_price(self):
         return self.price

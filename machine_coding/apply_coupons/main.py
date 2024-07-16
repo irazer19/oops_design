@@ -1,21 +1,22 @@
 from product import Product
-from cart import Cart
+from coupon import *
+from cart import ShoppingCart
 
+# Create products
+product1 = Product("Laptop", 1000, "Electronics")
+product2 = Product("Chair", 200, "Furniture")
 
-def run():
-    """
-    We use Decorator design pattern to apply coupons sequentially.
-    """
-    iphone = Product(product_name="iPhone 14", price=1400)
-    chair = Product(product_name="Chair", price=300)
+# Create coupons
+coupon1 = PercentageOffCoupon(10)  # 10% off
+coupon2 = FixedAmountOffCoupon(50)  # $50 off
 
-    cart = Cart([])
-    cart.add_product(iphone, prod_type="Phone")
-    cart.add_product(chair, prod_type="Furniture")
-    print(cart.get_total_price())
+# Create shopping cart and add products and coupons
+cart = ShoppingCart()
+cart.add_product(product1)
+cart.add_product(product2)
+cart.add_coupon(coupon1)
+cart.add_coupon(coupon2)
 
-    pass
-
-
-if __name__ == "__main__":
-    run()
+# Calculate total price after applying coupons
+total_price = cart.calculate_total()
+print(f"Total price after applying coupons: ${total_price}")
